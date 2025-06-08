@@ -1,13 +1,12 @@
-| Sigla | Significado                                 | Função principal                                                                   |
-| ----- | ------------------------------------------- | ---------------------------------------------------------------------------------- |
-| ECU   | Electronic Control Unit                     | Controla sistemas eletrônicos do veículo                                           |
-| ABS   | Anti-lock Braking System                    | Evita travamento das rodas durante frenagem                                        |
-| EPS   | Electric Power Steering                     | Direção elétrica assistida                                                         |
-| BCM   | Body Control Module                         | Controla componentes da carroceria (luzes, vidros, travas, etc.)                   |
-| PDC   | Park Distance Control                       | Auxílio de estacionamento por sensores ultrassônicos                               |
-| BMS   | Battery Management System                   | Gerencia a bateria (estado de carga, temperatura, segurança) em veículos elétricos |
-| IPB   | Intelligence Preparation of the Battlefield | Termo militar, não relacionado ao setor automotivo                                 |
-| BASU  | (não identificado publicamente)             | Possivelmente nome interno de fabricante                                           |
-| SMU   | (não identificado publicamente)             | Pode representar um módulo específico da arquitetura de algum fabricante           |
-| MMCU  | (não identificado publicamente)             | Similar ao acima, sem padronização pública conhecida                               |
+| Sigla | Nome Completo                    | Função Principal                                                                         |
+| ----- | -------------------------------- | ---------------------------------------------------------------------------------------- |
+| BASU  | Brake Actuation System Unit¹     | Unidade responsável pela atuação do sistema de freios (sensores e válvulas hidráulicas). |
+| EPS   | Electric Power Steering²         | Sistema de direção assistida elétrica, melhora manobrabilidade e eficiência.             |
+| IPB   | Integrated Power Brake³          | Sistema de freio hidropneumático que integra freio regenerativo e controle eletrônico.   |
+| MMCU  | Main Motor Control Unit⁴         | Unidade de controle principal do motor elétrico, gerenciando inversor, torque e RPM.     |
+| SMCU  | Smart Motor Control Unit⁵        | Variante inteligente e distribuída do controle do motor, com recursos avançados.         |
+| PDC   | Park Distance Control⁶           | Sistema de sensores ultrassônicos que auxilia em manobras de estacionamento.             |
+| ABS   | Anti-lock Braking System⁷        | Evita o travamento das rodas durante frenagens, controlando a pressão hidráulica.        |
+| LBMS  | Local Battery Management System⁸ | Sistema de gerenciamento de células ou módulos de bateria em subnível dentro do BMS.     |
+| BMS   | Battery Management System⁸       | Sistema completo para gerenciamento da bateria (SOC, equilíbrio, segurança).             |
 

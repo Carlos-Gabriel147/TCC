@@ -19,7 +19,7 @@ comandos_iniciais = [
     "AT L0",    # Linefeed off
     "AT S0",    # Printing of spaces off
     "AT H1",    # Headers on (para ver o endereço de resposta)
-    "AT SP 6",  # Seleciona protocolo ISO 15765-4 (CAN 11bit 500kbps)
+    #"AT SP 6",  # Seleciona protocolo ISO 15765-4 (CAN 11bit 500kbps)
 ]
 
 print("Inicializando ELM327...")
@@ -30,7 +30,7 @@ for cmd in comandos_iniciais:
 print("\nProcurando ECUs que respondem ao VIN (22 F190)...\n")
 
 # --- Testa todas as ECUs de 7E0 a 7EF ---
-ecus_possiveis = [f"7E{n:X}" for n in range(0x0, 0xF)]  # de 7E0 a 7EF
+ecus_possiveis = [str(hex(i)) for i in range(0x7D0, 0x800)]
 
 for ecu in ecus_possiveis:
     enviar_comando(ser, f"AT SH {ecu}")  # Define o header de envio

@@ -1,0 +1,12 @@
+Comando: 01 00
+7E8 06 41 00 00 08 00 00
+
+7EB = ECU
+06 = 6 bytes
+41 = Resposta ao modo 09 (40 + 1) OK
+00 = PID que eu enviei
+00 08 00 00 = Carga = 00000000 00001000 00000000 00000000
+-> Apenas o PID 0d está disponível nesse modo
+
+Comando: 09 02
+>E8 22 30 30 30 32 39 32 39 

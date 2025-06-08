@@ -1,0 +1,13 @@
+| Sigla | Significado                                 | Função principal                                                                   |
+| ----- | ------------------------------------------- | ---------------------------------------------------------------------------------- |
+| ECU   | Electronic Control Unit                     | Controla sistemas eletrônicos do veículo                                           |
+| ABS   | Anti-lock Braking System                    | Evita travamento das rodas durante frenagem                                        |
+| EPS   | Electric Power Steering                     | Direção elétrica assistida                                                         |
+| BCM   | Body Control Module                         | Controla componentes da carroceria (luzes, vidros, travas, etc.)                   |
+| PDC   | Park Distance Control                       | Auxílio de estacionamento por sensores ultrassônicos                               |
+| BMS   | Battery Management System                   | Gerencia a bateria (estado de carga, temperatura, segurança) em veículos elétricos |
+| IPB   | Intelligence Preparation of the Battlefield | Termo militar, não relacionado ao setor automotivo                                 |
+| BASU  | (não identificado publicamente)             | Possivelmente nome interno de fabricante                                           |
+| SMU   | (não identificado publicamente)             | Pode representar um módulo específico da arquitetura de algum fabricante           |
+| MMCU  | (não identificado publicamente)             | Similar ao acima, sem padronização pública conhecida                               |
+

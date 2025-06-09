@@ -35,6 +35,8 @@ def main():
     enviar_comando(ser, "AT L1")
     enviar_comando(ser, "AT S1")
     enviar_comando(ser, "AT H1")
+    #enviar_comando(ser, "AT CP 01")
+    enviar_comando(ser, "AT SP 7")
     #enviar_comando(ser, "AT MA")
     #enviar_comando(ser, "AT CAF0")
     #enviar_comando(ser, "AT CSM0")

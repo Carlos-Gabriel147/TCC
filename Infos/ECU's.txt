@@ -1,66 +1,67 @@
-Procurando ECUs que respondem ao VIN (22 F190)...
+7C0 = 0 DATA
+7C1 = 0 DATA
+7C2 = RESPOSTA (7CA)
+7C3 = 0 DATA
+7C4 = 0 DATA
+7C5 = 0 DATA
+7C6 = 0 DATA
+7C7 = 0 DATA
+7C8 = 0 DATA
+7C9 = 0 DATA
+7CA = 0 DATA
+7CB = 0 DATA
+7CC = 0 DATA
+7CD = 0 DATA
+7CE = 0 DATA
+7CF = 0 DATA
 
-7E0
-7E8 22 30 30 30 32 39 32 39 
+7D0 = 0 DATA
+7D1 = ECO
+7D2 = 0 DATA
+7D3 = 0 DATA
+7D4 = RESPOSTA (7DC)
+7D5 = ECO
+7D6 = RESPOSTA (7DE)
+7D7 = ECO
+7D8 = ECO
+7D9 = ECO
+7DA = ECO
+7DB = ECO
+7DC = 0 DATA
+7DD = 0 DATA
+7DE = 0 DATA
+7DF = 0 DATA
 
-7E1
-22 F190
+7E0 = RESPOSTA (7EB) -> PRINCIPAL
+7E1 = ECO
+7E2 = RESPOSTA (7EA)
+7E3 = RESPOSTA (7EB)
+7E4 = ECO
+7E5 = ECO
+7E6 = ECO
+7E7 = RESPOSTA (7EF)
+7E8 = ECO
+7E9 = ECO
+7EA = ECO
+7EB = ECO
+7EC = ECO
+7ED = ECO
+7EE = ECO
+7EF = ECO
 
-7E2
->EA 22 30 30 30 32 39 32 39 
-
-7E3
->EB 03 7F 22 22 
-
-7E4
-22 F190
-
-7E5
-22 F190
-
-7E6
-22 F190
-
-7E7
-22 F190
-
-7E8
-22 F190
-
-7E9
-22 F190
-
-7EA
-22 F190
-
-7E0 = Responde normalmente
-7E1 = 0 Data
-7E2 = Responde normalmente
-7E3 = Responde normalmente
-7E4 = Eco + Responde normalmente
-7E5 = 0 Data
-7E6 = 0 Data
-7E7 = Respode normalmente
-7E8 = 0 Data
-7E9 = 0 Data
-7EA = 0 Data
-7EB = 0 Data
-7EC = 0 Data
-7ED = 0 Data
-7EE = 0 Data
-7EF = 0 Data
-7F0 = 0 Data
-7F1 = Responde normalmente
-7F2 = Responde normalmente
-7F3 = 0 Data
-7F4 = 0 Data
-7F5 = 0 Data
-7F6 = 0 Data
-7F7 = 0 Data
-7F8 = 0 Data
-7F9 = 0 Data
-7FA = 0 Data
-7FB = 0 Data
-7FC = 0 Data
-7FD = 0 Data
-7FF = 0 Data
+7F0 = ECO
+7F1 = RESPOSTA (7F9)
+7F2 = RESPOSTA (7FA)
+7F3 = ECO
+7F4 = ECO
+7F5 = ECO
+7F6 = ECO
+7F7 = ECO
+7F8 = ECO
+7F9 = ECO
+7FA = ECO
+7FB = ECO
+7FC = ECO
+7FD = ECO
+7FE = ECO
+7FF = ECO

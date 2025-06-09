@@ -20,7 +20,7 @@ print("Escutando...\n")
 try:
     while True:
         #
-        # ser.write(b'AT\r')
+        ser.write(b'AT\r')
         time.sleep(1)
         #ser.write(b'AT MA\r')
         #linha = ser.read_until(b'\r').decode(errors='ignore').strip()

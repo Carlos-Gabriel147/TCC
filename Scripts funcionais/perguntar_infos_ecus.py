@@ -3,23 +3,10 @@ import time
 
 PORTA = '/dev/rfcomm0'
 BAUDRATE = 9600
-ARQUIVO_SAIDA = 'testes_7E0_filtrado.txt'
-ECU = '7E0'
-REPS = 40
+ARQUIVO_SAIDA = 'perguntar_infos_ecus.txt'
 
-# Lista de PIDs válidos (apenas os valores hexadecimais após "22 ")
-PIDS_VALIDOS = [
-    '0002', '0005', '0006', '0007', '0008', '0009', '000A', '000B', '000C', '000D', '000E', '000F',
-    '0010', '0011', '0012', '0013', '0014', '0015', '0016', '0017', '0018', '0019', '001A', '001B',
-    '001C', '001D', '001E', '001F', '0020', '0021', '0022', '0023', '0026', '0200', '0201', '0202',
-    '0203', '0204', '0205', '0206', '0207', '0208', '0209', '020A', '020B', '020C', '020D', '020E',
-    '020F', '0210', '0211', '0212', '0213', '0214', '0215', '0216', '0217', '0218', '0219', '021A',
-    '021B', '021C', '021D', '021E', '021F', '0220', '0221', '0222', '0223', '0224', '0225', '0226',
-    '0227', '0228', '0229', '022A', '022B', '022C', '022D', '022E', '022F', '0230', '0231', '0232',
-    '0233', 'F190', 'F193', 'F194', 'F195', 'F197', 'F1F0'
-]
-
-#PIDS_VALIDOS = ['0012']
+ECUS = ['7C2', '7D4', '7D6', '7E0', '7E2', '7E3', '7E7', '7F1', '7F2']
+PIDS = ['F193', 'F194', 'F195', 'F197', 'F1F0']
 
 def iniciar_conexao(porta, baudrate):
     try:
@@ -47,15 +34,21 @@ def main():
     enviar_comando(ser, "AT L1")
     enviar_comando(ser, "AT S1")
     enviar_comando(ser, "AT H1")
-    enviar_comando(ser, "AT SH " + ECU)
 
-    print("[*] Testando PIDs conhecidos por 70 vezes cada... Pressione Ctrl+C para interromper.\n")
+    print("[*] Testando ECUs e PIDs conhecidos... Pressione Ctrl+C para interromper.\n")
 
     with open(ARQUIVO_SAIDA, 'a') as f:
         try:
-            for pid in PIDS_VALIDOS:
-                comando = f"22 {pid}"
-                for i in range(REPS):
+            for ecu in ECUS:
+                enviar_comando(ser, f"AT SH {ecu}")
+                print(f"\n[=] Comunicando com ECU {ecu}\n")
+
+                f.write('\n')
+                f.write(ecu)
+                f.write('\n')
+
+                for pid in PIDS:
+                    comando = f"22 {pid}"
                     resp = enviar_comando(ser, comando)
 
                     print(comando)
@@ -75,4 +68,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

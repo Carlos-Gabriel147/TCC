@@ -1,10 +1,16 @@
+'''
+Script para perguntar todos os valores de 22 0000 até 22 FFFF para um única ECU específica
+'''
+
 import serial
 import time
 
+ECU = '7E0'
+
+output = r'Coletas/' + ECU + '/' + 'bruto.txt'
+
 PORTA = '/dev/rfcomm0'
 BAUDRATE = 9600
-ARQUIVO_SAIDA = 'respostas_7B0.txt'
-ECU = '7B0'
 
 def iniciar_conexao(porta, baudrate):
     try:
@@ -36,7 +42,7 @@ def main():
 
     print("[*] Iniciando varredura de PIDs no formato '22 XXXX'... Pressione Ctrl+C para interromper.\n")
 
-    with open(ARQUIVO_SAIDA, 'a') as f:
+    with open(output, 'a') as f:
         try:
             for pid in range(0x0000, 0x10000):  # 0000 até FFFF
                 pid_hex = f"{pid:04X}"
@@ -57,7 +63,7 @@ def main():
             print("\n[*] Varredura interrompida pelo usuário.")
 
     ser.close()
-    print(f"[*] Conexão encerrada. Respostas salvas em '{ARQUIVO_SAIDA}'.")
+    print(f"[*] Conexão encerrada. Respostas salvas em '{output}'.")
 
 if __name__ == "__main__":
     main()

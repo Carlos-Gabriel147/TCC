@@ -89,3 +89,8 @@
 22 F195: 7E8 10 09 62 F1 95 75 3A 17, 7E8 21 04 19 0A AA AA AA AA
 22 F197: 7E8 10 0B 62 F1 97 45 4D 32, 7E8 21 45 20 20 20 20 AA AA
 22 F1F0: 7E8 06 62 F1 F0 AA AA AA
+
+Quantidade de comandos: 65536
+Negativo: 65445
+Positivo: 91
+Janelas de tamanho: {2, 3, 4}

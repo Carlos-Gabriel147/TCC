@@ -1,5 +1,12 @@
-input = r"respostas_7EB.txt"
-output = r"filtro_7eb.txt"
+'''
+Script para filtrar todas as respostas do script "22_auto.py"
+para separar apenas os ID's de uma ECU espefícica que responderam algo
+'''
+
+ECU = '7E0'
+
+input = r'Coletas/' + ECU + '/' + 'bruto.txt'
+output = r'Coletas/' + ECU + '/' + 'filtrado.txt'
 
 debug = False
 
@@ -70,3 +77,8 @@ with open(input, 'r') as dados, open(output, 'w') as filtro:
     print(f"Negativo: {cont_neg}")
     print(f"Positivo: {cont_pos}")
     print(f"Janelas de tamanho: {set(tamanhos)}")
+
+    filtro.write(f"\nQuantidade de comandos: {cont_janelas}\n")
+    filtro.write(f"Negativo: {cont_neg}\n")
+    filtro.write(f"Positivo: {cont_pos}\n")
+    filtro.write(f"Janelas de tamanho: {set(tamanhos)}\n")

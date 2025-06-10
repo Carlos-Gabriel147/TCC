@@ -1,0 +1,7 @@
+DID, Local, Variação (hex)
+
+000a, Freio,        0- 1
+000b, Acelerador,   0 - 63
+000c, Freio,        0 - 51
+0011, Acelerador,   2 - 11
+0012, Acelerador,   1 - 8

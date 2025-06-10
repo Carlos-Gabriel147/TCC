@@ -1,3 +1,7 @@
+'''
+Script para mandar iterativamente comandos para o ELM327 via teclado.
+'''
+
 import serial
 import time
 

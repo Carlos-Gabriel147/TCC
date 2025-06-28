@@ -6,7 +6,7 @@ import serial
 import time
 
 # Modifique conforme a porta do seu ELM327 (ex: /dev/ttyUSB0 ou /dev/rfcomm0 para Bluetooth)
-PORTA = '/dev/rfcomm0'
+PORTA = 'COM4'
 BAUDRATE = 9600  # 38400 ou 9600 são comuns, tente o que funcionar com seu adaptador
 
 # AT CP 18
@@ -40,7 +40,7 @@ def main():
     enviar_comando(ser, "AT S1")
     enviar_comando(ser, "AT H1")
     #enviar_comando(ser, "AT CP 01")
-    enviar_comando(ser, "AT SP 7")
+    enviar_comando(ser, "AT SP 0")
     #enviar_comando(ser, "AT MA")
     #enviar_comando(ser, "AT CAF0")
     #enviar_comando(ser, "AT CSM0")

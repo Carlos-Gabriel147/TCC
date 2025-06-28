@@ -5,11 +5,11 @@ Script para perguntar todos os valores de 22 0000 até 22 FFFF para um única EC
 import serial
 import time
 
-ECU = '7E0'
+ECU = '7E7'
 
 output = r'Coletas/' + ECU + '/' + 'bruto.txt'
 
-PORTA = '/dev/rfcomm0'
+PORTA = 'COM4'
 BAUDRATE = 9600
 
 def iniciar_conexao(porta, baudrate):
@@ -39,8 +39,13 @@ def main():
     enviar_comando(ser, "AT S1")
     enviar_comando(ser, "AT H1")
     enviar_comando(ser, "AT SH " + ECU)
+    #enviar_comando(ser, "AT ST 4") #*4ms
+    #enviar_comando(ser, "AT AT 0")
 
     print("[*] Iniciando varredura de PIDs no formato '22 XXXX'... Pressione Ctrl+C para interromper.\n")
+
+    resp_count = 0
+    start_time = time.time()
 
     with open(output, 'a') as f:
         try:
@@ -48,6 +53,7 @@ def main():
                 pid_hex = f"{pid:04X}"
                 comando = f"22 {pid_hex}"
                 resp = enviar_comando(ser, comando)
+                resp_count += 1
 
                 print(comando)
                 print(resp)
@@ -64,6 +70,10 @@ def main():
 
     ser.close()
     print(f"[*] Conexão encerrada. Respostas salvas em '{output}'.")
+    end_time = time.time()
+    total_time = end_time-start_time
+    print(f"Tempo total: {total_time:.2f}s")
+    print(f"FPS: {resp_count/total_time:.2f}")
 
 if __name__ == "__main__":
     main()

@@ -6,9 +6,9 @@ analisando a resposta desses endereços para o comando 22 F190.
 import serial
 import time
 
-output = r'Coletas/ECUS/ECUS_perguntas_infos.txt'
+output = r'Coletas/ECUS/2ECUS_perguntas_infos.txt'
 
-PORTA = '/dev/rfcomm0'
+PORTA = 'COM4'
 BAUDRATE = 9600
 
 PIDS = ['F193', 'F194', 'F195', 'F197', 'F1F0']

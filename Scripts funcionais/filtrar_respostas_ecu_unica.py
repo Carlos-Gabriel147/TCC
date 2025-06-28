@@ -3,7 +3,8 @@ Script para filtrar todas as respostas do script "22_auto.py"
 para separar apenas os ID's de uma ECU espefícica que responderam algo
 '''
 
-ECU = '7E0'
+ECU = '7E7'
+ECU_RESP = '7EF'
 
 input = r'Coletas/' + ECU + '/' + 'bruto.txt'
 output = r'Coletas/' + ECU + '/' + 'filtrado.txt'
@@ -50,8 +51,8 @@ with open(input, 'r') as dados, open(output, 'w') as filtro:
                 print(f"Comando diferente de 22: {janela[0][0:2]}, janela {cont_janelas}")
 
             # Mostrar se teve alguma resposta diferente de 7EB
-            if janela[1][0:3] != "7E8":
-                print(f"Resposta diferente de 7E8: {janela[1][0:3]}")
+            if janela[1][0:3] != ECU_RESP:
+                print(f"Resposta diferente de {ECU_RESP}: {janela[1][0:3]}")
 
             # Verificar se a resposta foi válida ou nao
             if janela[1][7:9] != "7F":

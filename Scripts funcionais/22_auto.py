@@ -26,7 +26,7 @@ def enviar_comando(ser, comando):
     if not comando.endswith('\r'):
         comando += '\r'
     ser.write(comando.encode())
-    time.sleep(0.2)
+    time.sleep(0.08)
     resposta = ser.read_all().decode(errors='ignore')
     return resposta
 
@@ -38,7 +38,8 @@ def main():
     enviar_comando(ser, "AT E0")
     enviar_comando(ser, "AT D")
     enviar_comando(ser, "AT D0")
-    enviar_comando(ser, "AT H1")
+    enviar_comando(ser, "AT H0")    # Eu add 0, app=1
+    enviar_comando(ser, "AT L0")    # Eu add
     enviar_comando(ser, "AT SP 0")
     enviar_comando(ser, "AT M0")
     enviar_comando(ser, "AT S0")
@@ -56,7 +57,7 @@ def main():
         try:
             for pid in range(0x0000, 0x10000):  # 0000 até FFFF
                 pid_hex = f"{pid:04X}"
-                comando = f"22 {pid_hex}"
+                comando = f"22{pid_hex}"
                 resp = enviar_comando(ser, comando)
                 resp_count += 1
 

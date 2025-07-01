@@ -5,9 +5,10 @@ Script para perguntar todos os valores de 22 0000 até 22 FFFF para um única EC
 import serial
 import time
 
-ECU = '7E7'
+ECU = '7E2'
 
 output = r'Coletas/' + ECU + '/' + 'bruto.txt'
+output = r'lixo.txt'
 
 PORTA = 'COM4'
 BAUDRATE = 9600
@@ -35,12 +36,16 @@ def main():
     # Inicialização do ELM327
     enviar_comando(ser, "AT Z")
     enviar_comando(ser, "AT E0")
-    enviar_comando(ser, "AT L1")
-    enviar_comando(ser, "AT S1")
+    enviar_comando(ser, "AT D")
+    enviar_comando(ser, "AT D0")
     enviar_comando(ser, "AT H1")
+    enviar_comando(ser, "AT SP 0")
+    enviar_comando(ser, "AT M0")
+    enviar_comando(ser, "AT S0")
+    enviar_comando(ser, "AT AT 1")
+    enviar_comando(ser, "AT AL")
+    enviar_comando(ser, "AT ST 64")
     enviar_comando(ser, "AT SH " + ECU)
-    #enviar_comando(ser, "AT ST 4") #*4ms
-    #enviar_comando(ser, "AT AT 0")
 
     print("[*] Iniciando varredura de PIDs no formato '22 XXXX'... Pressione Ctrl+C para interromper.\n")
 

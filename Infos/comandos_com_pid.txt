@@ -11,3 +11,7 @@ PIDS_9A                   PID: 0900  -
 PIDS_A                    PID: 0100  - 
 SPEED                     PID: 010D  - 
 VIN                       PID: 0902  - 
+
+volante: -490 até 504
+freio: 0 até 83
+acelerador: 0 até 99 (agr ta indo até 74, nao sei pq)

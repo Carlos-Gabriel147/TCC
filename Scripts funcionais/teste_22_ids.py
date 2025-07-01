@@ -6,14 +6,14 @@ Verificar se esses valores variam se alterar os pedais ou volante.
 import serial
 import time
 
-ECU = '7E0'
+ECU = '7E2'
 
 input = r'Coletas/' + ECU + '/' + 'filtrado.txt'
-output = r'Coletas/' + ECU + '/' + 'teste.txt'
+output = r'Coletas/' + ECU + '/' + 'teste_todos.txt'
 
-PORTA = '/dev/rfcomm0'
+PORTA = 'COM4'
 BAUDRATE = 9600
-REPS = 40
+REPS = 200
 
 PIDS_VALIDOS = []
 
@@ -34,10 +34,12 @@ def list_ids(input):
 # Lista de PIDs válidos (apenas os valores hexadecimais após "22 ")
 if not PIDS_VALIDOS:
     PIDS_VALIDOS = list_ids(input)
+else:
     output = r'Coletas/' + ECU + '/' + 'teste_variam.txt'
 
 print(PIDS_VALIDOS)
-exit()
+print()
+
 def iniciar_conexao(porta, baudrate):
     try:
         ser = serial.Serial(porta, baudrate, timeout=1)

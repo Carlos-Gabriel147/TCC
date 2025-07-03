@@ -50,7 +50,7 @@ def filtrar_resposta(resp):
     resp = sorted(resp.strip().split('\\r'), key=len, reverse=True)
     #print(resp)
             
-    return next((s for s in resp if s.startswith('62')), -1)        
+    return next((s for s in resp if s.startswith('62')), None)
 
 
 
@@ -69,25 +69,38 @@ def main():
     while True:
 
         for ecu, ids in sensores.items():
-            enviar_comando(ser, "ATSH" + ecu, 0.05)
+            enviar_comando(ser, "ATSH" + ecu, 0.03)
             
             for id in ids:
-                resp = enviar_comando(ser, "22" + id, 0.05)
-                print("- ID: ", id)
+                resp = enviar_comando(ser, "22" + id, 0.08)
+                #print("- ID: ", id)
 
-                if ecu == "7E2":
-                    #val = resp[-2:0]
-                    print(filtrar_resposta(resp))
-                    #print(int(val))
-                    #print(mapear(val, ))
+                resp = filtrar_resposta(resp)
 
-                elif ecu == "783":
-                    #val = resp[-4:0]
-                    print(filtrar_resposta(resp))
-                    #print(int(val))
-                    #print(mapear(val, ))
+                if resp:
+                    if ecu == "7E2":
+                        try:
+                            resp = int(resp[-2:], 16)
 
-                print()
+                            if id=="000B":
+                                print(f'Acc:     {resp}%')
+                            if id=="000C":
+                                print(f'Freio:   {resp}%')
+                        except:
+                            print("-> Dados corrompidos")
+
+                    elif ecu == "783":
+                        try:
+                            resp = int(resp[-4:], 16)
+                            resp = (resp - 65536)/10 if resp > 32768 else resp/10
+
+                            print(f'Volante: {resp}°')
+                        except:
+                            print("-> Dados corrompidos")
+                else:
+                    print("-> Sem dados")
+
+        print()
     
 if __name__ == "__main__":
     main()

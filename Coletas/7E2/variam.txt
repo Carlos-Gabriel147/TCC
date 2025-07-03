@@ -1,5 +1,0 @@
-000A - freio 0 a 1
-000B - acc 0 ate 44
-000C - freio - 0 ate 47
-0011 - acc - E4 02 até AC 0D
-0204 - ? fica variando entre 41 e 42

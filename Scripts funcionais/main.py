@@ -22,8 +22,9 @@ comandos_iniciais = [
         ]
 
 sensores = {"7E2": ["000B", "000C"], "783": ["0003"]}
-leituras = {"7E2000B": "", "7E2000C": "", "7830003": ""}
-atualizacao = {"7E2000B": False, "7E2000C": False, "7830003": False}
+entradas = {"7E2000B": "", "7E2000C": "", "7830003": ""}
+saidas = {"7E2000B": "", "7E2000C": "", "7830003": ""}
+update = {"7E2000B": False, "7E2000C": False, "7830003": False}
 
 
 # Conectar a porta com virtual do bluetooth
@@ -54,54 +55,79 @@ def filtrar_resposta(resp):
     return next((s for s in resp if s.startswith('62')), None)
 
 
+# Mapear os valores lidos em unidades reais
+def mapear(ecu, carga):
+
+    if not carga:
+        return carga
+
+    try:
+        valor = int(carga, 16)
+    except ValueError:
+        return carga
+
+    if ecu == "7E2":
+        return valor
+
+    elif ecu == "783":
+        return (valor - 65536)/10 if valor > 32768 else valor/10
+
+    return carga
+
+
 # Thread de envio de comandos e leitura dos dados
 def requisitar_dados(ser):
 
-    global atualizacao
-
+    cont = 0
     while True:
-
         for ecu, ids in sensores.items():
-            enviar_comando(ser, "ATSH" + ecu, 0.03)
+            #enviar_comando(ser, "ATSH" + ecu, 0.03)
             
             for id in ids:
-                leituras[ecu+id] = enviar_comando(ser, "22" + id, 0.08)
-                atualizacao[ecu+id] = True
-
+                #entradas[ecu+id] = enviar_comando(ser, "22" + id, 0.08)
+                entradas[ecu+id] = f"\rSTOPS\r22000C\r6200147{cont}\r<\r"
+                update[ecu+id] = True
+                cont+=1
+                time.sleep(0.5)
 
 # Thread de entendimento das respostas
 def entender_respostas():
 
     while True:
-        for sensor, update in atualizacao.items():
-            if update:
+        for sensor, up in update.items():
 
-                # Tenta filtrar uma resposta válida
+            if up:
+                #print(saidas)
+
+                # Tenta filtrar uma resposta válida, se teve resposta válida, atualizar leitura
                 try:
-                    resp = filtrar_resposta(leituras[sensor])
-
-                    # Se teve resposta válida, atualizar leitura
+                    resp = filtrar_resposta(entradas[sensor])
                     if resp:
-                        leituras[sensor] = resp
+                        saidas[sensor] = resp
 
                 # Envia último valores para o simulador, se um valor não foi válido, apenas irá repeti-lo
                 finally:
-                    # enviar_para_simulador(leituras[sensor]) Aqui envia a leituras[sensor] para o simulador do 
-                    pass
+                    update[sensor] = False
 
-        print(leituras)
+                    print(f"Acc: {mapear('7E2', saidas['7E2000B'][-2:])}% \
+                          \nFreio: {mapear( '7E2', saidas['7E2000C'][-2:])}% \
+                          \nVolante: {mapear('783', saidas["7830003"][-4:])}°\n")
+                    
+                    # enviar_para_simulador(entradas[sensor])
+
 
 def main():
 
-    # Porta COM virtual do bluetooth
-    ser = iniciar_conexao(PORTA, BAUDRATE, TIMEOUT)
+    # # Porta COM virtual do bluetooth
+    # ser = iniciar_conexao(PORTA, BAUDRATE, TIMEOUT)
+    ser = "abc"
 
-    # Comandos inicias de configurações
-    for comando in comandos_iniciais:
-        enviar_comando(ser, comando, 0.1)
+    # # Comandos inicias de configurações
+    # for comando in comandos_iniciais:
+    #     enviar_comando(ser, comando, 0.1)
 
     # Instanciar threads
-    th_requisitar_dados = threading.Thread(target=requisitar_dados, args=(ser), daemon=True)
+    th_requisitar_dados = threading.Thread(target=requisitar_dados, args=(ser,), daemon=True)
     th_entender_respostas = threading.Thread(target=entender_respostas, args=(), daemon=True)
 
     # Iniciando as threads

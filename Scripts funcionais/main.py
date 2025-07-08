@@ -9,13 +9,13 @@ TIMEOUT = 1
 comandos_iniciais = [
         "AT Z",
         "AT E0",
-        "AT S0",
-        "AT H0",
-        "AT L0", 
         "AT D",
         "AT D0",
-        "AT M0",
+        "AT H0",
+        "AT L0", 
         "AT SP 0",
+        "AT M0",
+        "AT S0",
         "AT AT 1",
         "AT AL",
         "AT ST 64"
@@ -23,14 +23,14 @@ comandos_iniciais = [
 
 sensores = {"7E2": ["000B", "000C"], "783": ["0003"]}
 entradas = {"7E2000B": "", "7E2000C": "", "7830003": ""}
-saidas = {"7E2000B": "", "7E2000C": "", "7830003": ""}
+saidas = {"7E2000B": "0", "7E2000C": "0", "7830003": "0"}
 update = {"7E2000B": False, "7E2000C": False, "7830003": False}
 
 
 # Conectar a porta com virtual do bluetooth
 def iniciar_conexao(porta, baudrate, timeout):
     try:
-        ser = serial.Serial(porta=porta, baudrate=baudrate, timeout=timeout)
+        ser = serial.Serial(port=porta, baudrate=baudrate, timeout=timeout)
         print(f"[+] Conectado à porta {porta} @ {baudrate} baud")
         return ser
     
@@ -81,14 +81,13 @@ def requisitar_dados(ser):
     cont = 0
     while True:
         for ecu, ids in sensores.items():
-            #enviar_comando(ser, "ATSH" + ecu, 0.03)
+            enviar_comando(ser, "ATSH" + ecu, 0.02)
             
             for id in ids:
-                #entradas[ecu+id] = enviar_comando(ser, "22" + id, 0.08)
-                entradas[ecu+id] = f"\rSTOPS\r22000C\r6200147{cont}\r<\r"
+                entradas[ecu+id] = enviar_comando(ser, "22" + id, 0.05)
+                #entradas[ecu+id] = f"\rSTOPS\r22000C\r6200147{cont}\r<\r"
                 update[ecu+id] = True
-                cont+=1
-                time.sleep(0.5)
+                
 
 # Thread de entendimento das respostas
 def entender_respostas():
@@ -104,6 +103,8 @@ def entender_respostas():
                     resp = filtrar_resposta(entradas[sensor])
                     if resp:
                         saidas[sensor] = resp
+                    else:
+                        print(20*"=" + "> Erro <" + 20*"=")
 
                 # Envia último valores para o simulador, se um valor não foi válido, apenas irá repeti-lo
                 finally:
@@ -119,12 +120,11 @@ def entender_respostas():
 def main():
 
     # # Porta COM virtual do bluetooth
-    # ser = iniciar_conexao(PORTA, BAUDRATE, TIMEOUT)
-    ser = "abc"
+    ser = iniciar_conexao(PORTA, BAUDRATE, TIMEOUT)
 
-    # # Comandos inicias de configurações
-    # for comando in comandos_iniciais:
-    #     enviar_comando(ser, comando, 0.1)
+    # Comandos inicias de configurações
+    for comando in comandos_iniciais:
+        enviar_comando(ser, comando, 0.1)
 
     # Instanciar threads
     th_requisitar_dados = threading.Thread(target=requisitar_dados, args=(ser,), daemon=True)

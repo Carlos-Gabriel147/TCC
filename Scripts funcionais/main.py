@@ -6,8 +6,9 @@ PORTA = 'COM4'
 BAUDRATE = 9600
 TIMEOUT = 1
 
-ECU_SLEEP = 0.01 
-ID_SLEEP = 0.06
+CMD_INI_SLEEP = 0.1
+ECU_SLEEP = 0.02
+ID_SLEEP = 0.05
 
 comandos_iniciais = [
         "AT Z",
@@ -42,13 +43,21 @@ def iniciar_conexao(porta, baudrate, timeout):
         exit(1)
 
 
-# Enviar comando na porta serial virtual
-def enviar_comando(ser, comando="ATI", sleep_time=0.1):
-    if not comando.endswith('\r'):
-        comando += '\r'
+# Enviar comando na porta serial virtual com sleep definido
+def enviar_comando_manual_sleep(ser, comando="ATI", sleep_time=0.1):
     ser.write(comando.encode())
     time.sleep(sleep_time)
     return ser.read_all().decode(errors='ignore').strip()
+
+
+# Enviar comando na porta serial virtual com sleep "automatico" de espera de resposta
+def enviar_comando_auto_sleep(ser, comando="ATI"):
+    ser.write(comando.encode())
+    while True:
+        if ser.in_waiting >= 12:
+            return ser.read_all().decode(errors='ignore').strip()
+        else:
+            time.sleep(0.0001)
 
 
 # Filtrar resposta cagada do ELM
@@ -61,35 +70,24 @@ def filtrar_resposta(resp):
 # Mapear os valores lidos em unidades reais
 def mapear(ecu, carga):
 
-    if not carga:
-        return carga
-
     try:
-        valor = int(carga, 16)
-    except ValueError:
-        return carga
-
-    if ecu == "7E2":
-        return valor
-
-    elif ecu == "783":
-        return (valor - 65536)/10 if valor > 32768 else valor/10
-
-    return carga
-
-
-# Thread de envio de comandos e leitura dos dados
-def requisitar_dados(ser):
-
-    cont = 0
-    while True:
-        for ecu, ids in sensores.items():
-            enviar_comando(ser, "ATSH" + ecu, ECU_SLEEP)
+        if ecu == "7E2":
+            if not len(carga) == 8:
+                return None
             
-            for id in ids:
-                entradas[ecu+id] = enviar_comando(ser, "22" + id, ID_SLEEP)
-                #entradas[ecu+id] = f"\rSTOPS\r22000C\r6200147{cont}\r<\r"
-                update[ecu+id] = True
+            return int(carga[-2:], 16)
+
+        elif ecu == "783":
+            if not len(carga) == 10:
+                return None
+        
+            valor = int(carga[-4:], 16)
+            return (valor - 65536)/10 if valor > 32768 else valor/10
+        
+    except:
+        return None
+    
+    return None
                 
 
 # Thread de entendimento das respostas
@@ -99,47 +97,51 @@ def entender_respostas():
         for sensor, up in update.items():
 
             if up:
-                #print(saidas)
-
                 # Tenta filtrar uma resposta válida, se teve resposta válida, atualizar leitura
-                try:
-                    resp = filtrar_resposta(entradas[sensor])
-                    if resp:
+                resp = filtrar_resposta(entradas[sensor])
+
+                if resp is not None:
+                    resp = mapear(sensor[0:3], resp)
+
+                    if resp is not None:
                         saidas[sensor] = resp
-                    else:
-                        print(20*"=" + "> Erro <" + 20*"=")
+
+                else:
+                    print("*Erro")
+                    #pass
 
                 # Envia último valores para o simulador, se um valor não foi válido, apenas irá repeti-lo
-                finally:
-                    update[sensor] = False
+                update[sensor] = False
+                print(saidas)
+                #print(f"Acc: {saidas['7E2000B']}% \nFreio: {saidas['7E2000C']}% \nVolante: {saidas['7830003']}°\n")
 
-                    print(f"Acc: {mapear('7E2', saidas['7E2000B'][-2:])}% \
-                          \nFreio: {mapear( '7E2', saidas['7E2000C'][-2:])}% \
-                          \nVolante: {mapear('783', saidas["7830003"][-4:])}°\n")
-                    
-                    # enviar_para_simulador(saidas[sensor])
+                # enviar_para_simulador(saidas[sensor])
 
 
 def main():
 
-    # # Porta COM virtual do bluetooth
+    # Porta COM virtual do bluetooth
     ser = iniciar_conexao(PORTA, BAUDRATE, TIMEOUT)
 
     # Comandos inicias de configurações
     for comando in comandos_iniciais:
-        enviar_comando(ser, comando, 0.1)
+        enviar_comando_manual_sleep(ser, comando, CMD_INI_SLEEP)
 
-    # Instanciar threads
-    th_requisitar_dados = threading.Thread(target=requisitar_dados, args=(ser,), daemon=True)
+    # Instanciar thread
     th_entender_respostas = threading.Thread(target=entender_respostas, args=(), daemon=True)
 
-    # Iniciando as threads
-    th_requisitar_dados.start()
+    # Iniciar thread
     th_entender_respostas.start()
 
     try:
         while True:
-            time.sleep(0.1)
+            for ecu, ids in sensores.items():
+                enviar_comando_auto_sleep(ser, "ATSH" + ecu + '\r')
+                
+                for id in ids:
+                    entradas[ecu+id] = enviar_comando_auto_sleep(ser, "22" + id + '\r')
+                    #entradas[ecu+id] = f"\rSTOPS\r22000C\r6200147{cont}\r<\r"
+                    update[ecu+id] = True
 
     except KeyboardInterrupt:
         print("Encerrado")
@@ -147,3 +149,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+    # contagem enviar comando auto: 1min 344
+    # contagem enviar comando manual 1min: 402

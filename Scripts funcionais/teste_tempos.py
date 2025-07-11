@@ -153,9 +153,11 @@ def main():
 
     # Combinacoes de tempos
     combinacoes = []
-    for sleep1 in [round(x * 0.01, 3) for x in range(3, 4)]:       # 0.01 to 0.05
-        for sleep2 in [round(x * 0.01, 3) for x in range(9, 11)]:  # 0.01 to 0.1
+    for sleep1 in [round(x * 0.01, 3) for x in range(2, 3)]:       # 0.01 to 0.05
+        for sleep2 in [round(x * 0.01, 3) for x in range(7, 9)]:  # 0.01 to 0.1
             combinacoes.append((sleep1, sleep2))
+
+    print(combinacoes)
 
     try:
         for sleep_ecu, sleep_id in combinacoes:

@@ -6,6 +6,9 @@ PORTA = 'COM4'
 BAUDRATE = 9600
 TIMEOUT = 1
 
+ECU_SLEEP = 0.01 
+ID_SLEEP = 0.06
+
 comandos_iniciais = [
         "AT Z",
         "AT E0",
@@ -40,7 +43,7 @@ def iniciar_conexao(porta, baudrate, timeout):
 
 
 # Enviar comando na porta serial virtual
-def enviar_comando(ser, comando="AT I", sleep_time=0.1):
+def enviar_comando(ser, comando="ATI", sleep_time=0.1):
     if not comando.endswith('\r'):
         comando += '\r'
     ser.write(comando.encode())
@@ -81,10 +84,10 @@ def requisitar_dados(ser):
     cont = 0
     while True:
         for ecu, ids in sensores.items():
-            enviar_comando(ser, "ATSH" + ecu, 0.02)
+            enviar_comando(ser, "ATSH" + ecu, ECU_SLEEP)
             
             for id in ids:
-                entradas[ecu+id] = enviar_comando(ser, "22" + id, 0.05)
+                entradas[ecu+id] = enviar_comando(ser, "22" + id, ID_SLEEP)
                 #entradas[ecu+id] = f"\rSTOPS\r22000C\r6200147{cont}\r<\r"
                 update[ecu+id] = True
                 
@@ -114,7 +117,7 @@ def entender_respostas():
                           \nFreio: {mapear( '7E2', saidas['7E2000C'][-2:])}% \
                           \nVolante: {mapear('783', saidas["7830003"][-4:])}°\n")
                     
-                    # enviar_para_simulador(entradas[sensor])
+                    # enviar_para_simulador(saidas[sensor])
 
 
 def main():

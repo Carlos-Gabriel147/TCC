@@ -17,14 +17,14 @@ output_path = os.path.join(OUTPUT, "calc_eficiencia.txt")
 
 for log in logs:
 
-    print(f"Log: {log}")
+    # print(f"Log: {log}")
 
     ecu_sleep = log[4:8]
     id_sleep = log[12:16]
     amostras = []
 
-    if id_sleep.endswith('.'):
-        id_sleep = log[12:15] + '0'
+    # if id_sleep.endswith('.'):
+    #     id_sleep = log[12:15] + '0'
 
     ecu_sleep = float(ecu_sleep)
     id_sleep = float(id_sleep)
@@ -50,6 +50,7 @@ for log in logs:
             if linha[0] == 'F':
                 FPS = linha[5:]
                 FPSs.append(FPS)
+                print(f"Log: {log}")
 
             else:
                 amostras.append(int(linha.strip()))
